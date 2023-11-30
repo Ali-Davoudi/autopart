@@ -1,0 +1,136 @@
+{% extends 'core/base.html' %}
+{% load thumbnail %}
+
+{% block title %}درباره ما{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='درباره ما' %}
+    <div class="about_section mt-32">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="about_thumb">
+                        <img src="/static/img/about/about1.jpg" alt="">
+                    </div>
+
+                    <div class="about_content">
+                        <h1>به فروشگاه ما خوش آمدید!</h1>
+                        <p>هدف ما ارائه بهترین خدمات بصورت آنلاین و ارسال با ضمانت و ارائه بهترین کیفیت و بهترین قیمت
+                            است!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="choseus_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="chose_title">
+                        <h1>چرا ما را انتخاب میکنند؟</h1>
+                    </div>
+                </div>
+                {% for reason_choice in reason_choices %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single_chose">
+                            {% if reason_choice.image %}
+                                <div class="chose_icone">
+                                    {% thumbnail reason_choice.image '100x100' crop='center' as img %}
+                                        <img src="{{ img.url }}" alt="">
+                                    {% endthumbnail %}
+                                </div>
+                            {% endif %}
+                            <div class="chose_content">
+                                <h3>{{ reason_choice.title }}</h3>
+                                <p>{{ reason_choice.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="about_gallery_section">
+        <div class="container">
+            <div class="row">
+                {% for specialized_field in specialized_fields %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single_gallery_section">
+                            {% if specialized_field.image %}
+                                <div class="gallery_thumb">
+                                    {% thumbnail specialized_field.image '347x230' crop='center' as img %}
+                                        <img src="{{ img.url }}" alt="">
+                                    {% endthumbnail %}
+                                </div>
+                            {% endif %}
+                            <div class="about_gallery_content">
+                                <h3>{{ specialized_field.title }}</h3>
+                                <p>{{ specialized_field.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="testimonial_are">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="testimonial_titile">
+                        <h1>مشتریان ما چه می گویند؟</h1>
+                    </div>
+                </div>
+                <div class="testimonial_active owl-carousel">
+                    {% for customer_comment in customer_comments %}
+                        <div class="col-12">
+                            <div class="single_testimonial">
+                                <p>{{ customer_comment.comment }}</p>
+                                {% thumbnail customer_comment.image '100x100' crop='center' as img %}
+                                    <img src="{{ img.url }}" alt="">
+                                {% endthumbnail %}
+                                <span class="name">{{ customer_comment.name }}</span>
+                                <span class="job_title">{{ customer_comment.major }}  </span>
+                                <div class="product_ratting">
+                                    <ul>
+                                        {% if customer_comment.rate == 1 %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% elif customer_comment.rate == 2 %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% elif customer_comment.rate == 3 %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% elif customer_comment.rate == 4 %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% elif customer_comment.rate == 5 %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% else %}
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+<h2>برند</h2>
+<ul>
+    {% for product_brand in product_brands %}
+        <li>
+            <input type="checkbox">
+            <a href="{% url 'product_brands' brand=product_brand.url_title %}"> {{ product_brand.title }}
+                ({{ product_brand.product_brand }})</a>
+            <span class="checkmark"></span>
+        </li>
+    {% endfor %}
+
+</ul>

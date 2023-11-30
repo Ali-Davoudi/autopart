@@ -1,0 +1,17 @@
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        {% if articles %}
+                            <li><a href="{% url 'blog_list' %}">{{ articles }}</a></li>
+                        {% endif %}
+                        <li>{{ title }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

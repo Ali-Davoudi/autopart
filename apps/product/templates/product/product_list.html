@@ -1,0 +1,199 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+{% load render_partial %}
+{% load ratings %}
+
+{% block title %}محصولات{% endblock %}
+
+{% block content %}
+    <div class="shop_area shop_reverse">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+                    <!--sidebar widget start-->
+                    <aside class="sidebar_widget">
+                        <div class="widget_inner">
+                            <div class="widget_list widget_categories">
+                                {% render_partial 'apps.product.views.product_categories_component' %}
+                            </div>
+
+                            <div class="widget_list widget_categories">
+                                {% render_partial 'apps.product.views.product_brands_component' %}
+                            </div>
+                        </div>
+                        <div class="shop_sidebar_banner">
+                            {% for site_banner in site_banners %}
+                                <a href="{{ site_banner.url }}" target="_blank">
+                                    {% thumbnail site_banner.image '255x470' crop='center' as img %}
+                                        <img src="{{ img.url }}" alt="">
+                                    {% endthumbnail %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </aside>
+                    <!--sidebar widget end-->
+                </div>
+                <div class="col-lg-9 col-md-12">
+                    <!--shop wrapper start-->
+                    <!--shop toolbar start-->
+                    <div class="shop_banner">
+                        {% for top_site_banner in top_site_banners %}
+                            <a href="{{ top_site_banner.url }}" target="_blank">
+                                {% thumbnail top_site_banner.image '825x220' crop='center' as img %}
+                                    <img src="{{ img.url }}" alt="">
+                                {% endthumbnail %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="shop_title">
+                        <h1>فروشگاه</h1>
+                        {% if request.GET.search %}
+                            <br>
+                            <div class="alert alert-info">
+                                <p class="text-center">
+                                    تمامی نتایج مربوط به جستجو <span
+                                        class="text-warning">{{ request.GET.search }}</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="shop_toolbar_wrapper">
+                        <div class="shop_toolbar_btn">
+
+                            <button data-role="grid_3" type="button" class=" btn-grid-3" data-toggle="tooltip"
+                                    title="3"></button>
+
+                            <button data-role="grid_4" type="button" class=" btn-grid-4" data-toggle="tooltip"
+                                    title="4"></button>
+
+                            <button data-role="grid_list" type="button" class="active btn-list" data-toggle="tooltip"
+                                    title="List"></button>
+                        </div>
+                        <div class="page_amount">
+                            <p>نمایش نتایج {{ page_obj.start_index }}-{{ page_obj.end_index }}
+                                از {{ page_obj.paginator.count }} نتیجه</p>
+                        </div>
+                    </div>
+                    <!--shop toolbar end-->
+
+                    <div class="row shop_wrapper grid_list">
+                        {% for product in products %}
+                            <div class=" col-12 ">
+                                <div class="single_product">
+                                    <div class="product_name grid_name">
+                                        <h3><a href="product-details.html">چرخ جلویی پژو پارس</a></h3>
+                                        <p class="manufacture_product"><a href="#"> لوازم جانبی </a></p>
+                                    </div>
+                                    <div class="product_thumb">
+                                        {% thumbnail product.image '287x287' crop='center' quality=90 as img %}
+                                            <a href="{{ product.get_absolute_url }}"><img src="{{ img.url }}"
+                                                                                          alt=""></a>
+                                        {% endthumbnail %}
+                                        {% if product.discount and product.in_stock != 0 %}
+                                            <div class="label_product">
+                                                <span class="label_sale">{{ product.discount }}%-</span>
+                                            </div>
+                                        {% endif %}
+                                        <div class="action_links">
+                                            <ul>
+                                                <li class="quick_button"><a href="#" data-toggle="modal"
+                                                                            data-target="#modal_box"
+                                                                            title="نمایش جزئیات"> <span
+                                                        class="lnr lnr-magnifier"></span></a></li>
+                                                <li class="wishlist"><a href="wishlist.html"
+                                                                        title="افزودن به سبد خرید"><span
+                                                        class="lnr lnr-heart"></span></a></li>
+                                                <li class="مقایسه کنید"><a href="compare.html" title="مقایسه کنید"><span
+                                                        class="lnr lnr-sync"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content">
+                                        <div class="content_inner">
+                                            <div class="product_ratings">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="product_footer d-flex align-items-center">
+                                                <div class="price_box">
+                                                    <span class="current_price">16000 تومن</span>
+                                                    <span class="old_price">32000 تومن</span>
+                                                </div>
+                                                <div class="add_to_cart">
+                                                    <a href="cart.html" title="افزودن به سبد خرید"><span
+                                                            class="lnr lnr-cart"></span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product_content list_content">
+                                        <div class="left_caption">
+                                            <div class="product_name">
+                                                <h3><a href="{{ product.get_absolute_url }}">{{ product.title }} </a>
+                                                </h3>
+                                            </div>
+
+                                            {% include 'product/star_rating.html' with object=product %}
+
+                                            <div class="product_desc">
+                                                <p>{{ product.short_description }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="right_caption">
+                                            <div class="text_available">
+                                                {% if product.in_stock == 3 %}
+                                                    <p class="text-primary">تنها 3 عدد در انبار باقیست</p>
+                                                {% elif product.in_stock == 2 %}
+                                                    <p class="text-primary">تنها 2 عدد در انبار باقیست</p>
+                                                {% elif product.in_stock == 1 %}
+                                                    <p class="text-primary">تنها 1 عدد در انبار باقیست</p>
+                                                {% elif product.in_stock == 0 %}
+                                                    <p class="text-danger">فعلا موجود نمی باشد</p>
+                                                {% elif product.in_stock > 3 %}
+                                                    <p class="text-success"> موجود در انبار</p>
+                                                {% endif %}
+                                            </div>
+                                            {% if product.in_stock > 0 %}
+                                                <div class="price_box">
+                                                    {% if product.discount %}
+                                                        <span class="current_price">{{ product.sell_price|intcomma:False }} تومن</span>
+                                                        <span class="old_price">{{ product.price|intcomma:False }} تومن</span>
+                                                    {% else %}
+                                                        <span class="current_price">{{ product.price|intcomma:False }} تومن</span>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                            <div class="cart_links_btn">
+                                                <a href="{{ product.get_absolute_url }}" title="مشاهده جزییات">مشاهده
+                                                    جزییات</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="alert alert-info col-md-6" role="alert">
+                                <p>متاسفانه محصولی یافت نشد.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="shop_toolbar t_bottom">
+                        <div class="pagination">
+                            {% include 'core/partials/search_support_paginate.html' %}
+                        </div>
+                    </div>
+                    <!--shop toolbar end-->
+                    <!--shop wrapper end-->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

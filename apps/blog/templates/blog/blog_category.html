@@ -1,0 +1,9 @@
+<h3>دسته بندی</h3>
+<ul>
+    <li><a href="{% url 'blog_list' %}">همه مقالات</a></li>
+    {% for blog_category in blog_categories %}
+        <li>
+            <a href="{% url 'blog_list_by_category' category=blog_category.url_title %}">{{ blog_category.title }}</a>
+        </li>
+    {% endfor %}
+</ul>

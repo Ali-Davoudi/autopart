@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %}سیاست حریم خصوصی{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='سیاست حریم خصوصی' %}
+    <div class="privacy_policy_main_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="privacy_content section_1">
+                        {{ privacy.header|safe }}
+                    </div>
+                    <div class="privacy_content section_2">
+                        {{ privacy.description|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

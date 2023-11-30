@@ -1,0 +1,321 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}آنلاین اوتو پارت{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/message.html' %}
+    <section class="slider_section  mb-42">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="slider_area owl-carousel">
+                        {% for slider in sliders %}
+                            <div class="single_slider d-flex align-items-center"
+                                 data-bgimg="{% thumbnail slider.image '825x520' crop='center' as img %}{{ img.url }}{% endthumbnail %}">
+                                <div class="slider_content">
+                                    <h2> {{ slider.title }} </h2>
+                                    <h1> {{ slider.main_title }} </h1>
+                                    <a class="button" href="{{ slider.link }}"
+                                       target="_blank"> {{ slider.link_title }} </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 offset-md-4 offset-lg-0">
+                    <div class="sidebar_banner">
+                        {% for top_site_banner in top_site_banners %}
+                            <div class="banner_thumb">
+                                <a href="{{ top_site_banner.url }}"><img src="{{ top_site_banner.image.url }}"
+                                                                         alt=""></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!--slider area end-->
+
+    <!--shipping area start-->
+    <section class="shipping_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="shipping_inner">
+                        {% for support_service in support_services %}
+                            <div class="single_shipping">
+                                <div class="shipping_icone">
+                                    {% thumbnail support_service.image '41x41' crop='center' format='PNG' as img %}
+                                        <img src="{{ img.url }}" alt="">
+                                    {% endthumbnail %}
+                                </div>
+                                <div class="shipping_content">
+                                    <h2>{{ support_service.title }}</h2>
+                                    <p>{{ support_service.sub_title }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--shipping area end-->
+
+    <!--product area start-->
+    <section class="product_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_title">
+                        <h2><span> <strong> محصولات</strong> ما</span></h2>
+                        <ul class="product_tab_button nav" role="tablist">
+                            {% for category in product_categories %}
+                                <li>
+                                    <a class="{% if forloop.first %}active{% endif %}" data-toggle="tab"
+                                       href="#{{ category.title }}" role="tab"
+                                       aria-controls="{{ category.title }}"
+                                       aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ category.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content">
+                {% for category in product_categories %}
+                    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ category.title }}"
+                         role="tabpanel">
+                        <div class="product_carousel product_column{{ category.products|slice:':5'|length }} owl-carousel">
+                            {% for product in category.products %}
+                                <div class="single_product">
+                                    <div class="product_name">
+                                        <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+                                        <p class="manufacture_product">
+                                            <a href="{% url 'product_brands' brand=product.brand.url_title %}"> {{ product.brand.title }} </a>
+                                        </p>
+                                    </div>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" href="{{ product.get_absolute_url }}">
+                                            {% thumbnail product.image '600x600' crop='center' as img %}
+                                                <img src="{{ img.url }}" alt="">
+                                            {% endthumbnail %}
+                                        </a>
+                                        {% if product.discount %}
+                                            <div class="label_product">
+                                                <span class="label_sale">{{ product.discount }}%-</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="product_content">
+                                        {% include 'product/star_rating.html' with object=product %}
+                                        <div class="product_footer d-flex align-items-center">
+                                            <div class="price_box">
+                                                <span class="regular_price">{{ product.sell_price|intcomma:False }} تومن</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!--product area end-->
+    <!--small product area start-->
+    <section class="small_product_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_title">
+                        <h2><span>پر بازدیدترین محصولات</span></h2>
+                    </div>
+                    <div class="product_carousel small_product product_column{{ most_visited_products|slice:':3'|length }} owl-carousel">
+                        {% for product in most_visited_products %}
+                            <div class="single_product">
+                                <div class="product_content">
+                                    <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+                                    {% include 'product/star_rating.html' with object=product %}
+                                    <div class="price_box">
+                                        {% if product.discount %}
+                                            <span class="current_price">{{ product.sell_price|intcomma:False }} تومن</span>
+                                            <span class="old_price">{{ product.price|intcomma:False }} تومن</span>
+                                        {% else %}
+                                            <span class="current_price">{{ product.price|intcomma:False }} تومن</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="product_thumb">
+                                    <a class="primary_img" href="{{ product.get_absolute_url }}">
+                                        {% thumbnail product.image '600x600' crop='center' as img %}
+                                            <img src="{{ img.url }}" alt="">
+                                        {% endthumbnail %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--small product area end-->
+
+    <!--small product area start-->
+    <section class="small_product_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_title">
+                        <h2><span>پرفروش ترین محصولات</span></h2>
+                    </div>
+                    <div class="product_carousel small_product product_column{{ most_bought_products|slice:':3'|length }} owl-carousel">
+                        {% for product in most_bought_products %}
+                            <div class="single_product">
+                                <div class="product_content">
+                                    <h3><a href="{{ product.get_absolute_url }}">{{ product.title }} </a></h3>
+                                    {% include 'product/star_rating.html' with object=product %}
+                                    <div class="price_box">
+                                        <span class="regular_price">{{ product.price|intcomma:False }} تومن</span>
+                                    </div>
+                                </div>
+                                <div class="product_thumb">
+                                    <a class="primary_img" href="{{ product.get_absolute_url }}">
+                                        {% thumbnail product.image '600x600' crop='center' as img %}
+                                            <img src="{{ img.url }}" alt="">
+                                        {% endthumbnail %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--small product area end-->
+
+    <!--banner area start-->
+    <section class="banner_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="banner_container">
+                        {% for banner in banners %}
+                            <div class="single_banner">
+                                <div class="banner_thumb">
+                                    <a href="{{ banner.url }}">
+                                        {% thumbnail banner.image '550x221' crop='center' as img %}
+                                            <img src="{{ img.url }}" alt="">
+                                        {% endthumbnail %}
+                                    </a>
+                                    <div class="banner_text">
+                                        <h3>{{ banner.title }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--banner area end-->
+
+    <!--product area start-->
+    <section class="product_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_title">
+                        <h2><span> <strong>تخفیف</strong> ویژه </span></h2>
+                    </div>
+                    <div class="product_carousel product_column{{ special_discounts|slice:':5'|length }} owl-carousel">
+                        {% for special_discount in special_discounts %}
+                            <div class="single_product">
+                                <div class="product_name">
+                                    <h3>
+                                        <a href="{{ special_discount.get_absolute_url }}">{{ special_discount.title }}</a>
+                                    </h3>
+                                    <p class="manufacture_product"><a
+                                            href="{% url 'product_brands' brand=special_discount.brand.url_title %}"> {{ special_discount.brand.title }} </a>
+                                    </p>
+                                </div>
+                                <div class="product_thumb">
+                                    <a class="primary_img" href="{{ special_discount.get_absolute_url }}">
+                                        {% thumbnail special_discount.image '190x190' crop='center' as img %}
+                                            <img src="{{ img.url }}" alt="">
+                                        {% endthumbnail %}
+                                    </a>
+                                    <div class="label_product">
+                                        <span class="label_sale">{{ special_discount.discount }}%-</span>
+                                    </div>
+
+                                    <div class="action_links">
+                                        <ul>
+                                            <li class="quick_button"><a href="{{ special_discount.get_absolute_url }}"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal_box"
+                                                                        title="نمایش جزئیات"> <span
+                                                    class="lnr lnr-magnifier"></span></a></li>
+                                            <li class="wishlist"><a href="wishlist.html"
+                                                                    title="افزودن به سبد خرید"><span
+                                                    class="lnr lnr-heart"></span></a></li>
+                                            <li class="مقایسه کنید"><a href="compare.html" title="مقایسه کنید"><span
+                                                    class="lnr lnr-sync"></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product_content">
+                                    {% include 'product/star_rating.html' with object=special_discount %}
+                                    <div class="product_footer d-flex align-items-center">
+                                        <div class="price_box">
+                                            <span class="regular_price">{{ special_discount.sell_price|intcomma:False }}  تومن </span>
+                                        </div>
+                                        <div class="add_to_cart">
+                                            <a href="cart.html" title="افزودن به سبد خرید"><span
+                                                    class="lnr lnr-cart"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!--product area end-->
+
+
+    <!--brand area start-->
+    <div class="brand_area mb-42">
+        <div class="container">
+            <div class="row">
+                <h3>حامیان ما</h3>
+                <div class="col-12">
+                    <div class="brand_container owl-carousel">
+                        {% for sponser in sponsers %}
+                            <div class="single_brand">
+                                <a href="{% if sponser.url %}{{ sponser.url }}{% else %}#{% endif %}" target="_blank">
+                                    {% thumbnail sponser.image '100x100' crop='center' format='PNG' as img %}
+                                        <img src="{{ img.url }}" alt="">
+                                    {% endthumbnail %}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--brand area end-->
+
+{% endblock %}

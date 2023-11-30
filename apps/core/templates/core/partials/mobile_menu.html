@@ -1,0 +1,88 @@
+<div class="off_canvars_overlay"></div>
+<div class="Offcanvas_menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="canvas_open">
+                    <span>منو اصلی</span>
+                    <a href="javascript:void(0)"><i class="ion-navicon"></i></a>
+                </div>
+                <div class="Offcanvas_menu_wrapper">
+
+                    <div class="canvas_close">
+                        <a href="#"><i class="ion-android-close"></i></a>
+                    </div>
+
+                    <div class="top_right text-right">
+                        <ul>
+                            <li class="top_links"><a href="#"><i class="ion-android-person"></i> حساب کاربری من<i
+                                    class="ion-ios-arrow-down"></i></a>
+                                <ul class="dropdown_links">
+                                    {% if request.user.is_authenticated %}
+                                        <li><a href="{% url 'dashboard' %}">پنل کاربری من </a></li>
+                                        <li><a href="{% url 'user_basket_order' %}">سبد خرید</a></li>
+                                        <li><a href="{% url 'user_wishlist' %}">لیست علاقه مندی ها</a></li>
+                                        <li><a href="{% url 'logout' %}">خروج از حساب کاربری</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'login' %}">ورود</a></li>
+                                        <li><a href="{% url 'register' %}">ثبت نام</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="Offcanvas_follow">
+                        {% if setting.instagram or setting.twitter %}
+                            <div class="follow_us">
+                                <label>دنبال کردن:</label>
+                                <ul class="follow_link">
+                                    {% if setting.instagram %}
+                                        <li><a href="https://www.instagram.com/{{ setting.instagram }}"><i
+                                                class="ion-social-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if setting.twitter %}
+                                        <li><a href="https://www.twitter.com/{{ setting.twitter }}"><i
+                                                class="ion-social-twitter"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="search-container">
+                        <form action="{% url 'search_products' %}" method="get">
+                            <div class="search_box">
+                                <input placeholder="جستجو محصول..." type="text" name="search">
+                                <button type="submit"><i class="ion-ios-search-strong"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="menu" class="text-left ">
+                        <ul class="offcanvas_main_menu">
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'home' %}">صفحه اصلی</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'product_list' %}">محصولات</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'blog_list' %}">وبلاگ</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'service' %}">خدمات</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'about' %}">درباره ما</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'faq' %}">سوالات متداول</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'contact' %}">ارتباط با ما</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

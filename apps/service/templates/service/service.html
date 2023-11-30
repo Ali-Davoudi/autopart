@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% block title %}خدمات{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='خدمات ما' %}
+    <div class="our_services">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="services_title">
+                        <h2>خدمات ما</h2>
+                        <p>امیدواریم کیفیت کار ما مورد رضایت شما کاربران عزیز باشد</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for service in services %}
+                    <div class="col-lg-3 col-md-6">
+                        <div class="services_item">
+                            <div class="services_icone">
+                                <i class="{{ service.icon.icon }}" aria-hidden="true"></i>
+                            </div>
+                            <div class="services_desc">
+                                <h3>{{ service.title }}</h3>
+                                <p>{{ service.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="unlimited_services">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="services_section_thumb">
+                        <img src="/static/img/service/services4.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="unlimited_services_content">
+                        <h1> {{ service_detail.title }}</h1>
+                        <p>{{ service_detail.description }}</p>
+                        <div class="view__work">
+                            <a href="{{ service_detail.button_link }}" target="_blank">{{ service_detail.button_title }}
+                                <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

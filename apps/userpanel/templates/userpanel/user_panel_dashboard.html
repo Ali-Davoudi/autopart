@@ -1,0 +1,270 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+{% load jalali_tags %}
+
+{% block title %}
+    {% if request.user.first_name and request.user.last_name %}
+        پنل کاربری: {{ request.user }}
+    {% else %}
+        پنل کاربری من
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='پنل کاربری من' %}
+    {% include 'core/partials/message.html' %}
+    <section class="main_content_area">
+        <div class="container">
+            <div class="account_dashboard">
+                {% if current_user.avatar %}
+                    <div class="col-md-4">
+                        {% thumbnail current_user.avatar '200x200' crop='center' as img %}
+                            <img src="{{ img.url }}" alt="">
+                        {% endthumbnail %}
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+                        <!-- Nav tabs -->
+                        <div class="dashboard_tab_button">
+                            <ul role="tablist" class="nav flex-column dashboard-list">
+                                <li><a href="#dashboard" data-toggle="tab" class="nav-link active">داشبورد</a></li>
+                                <li><a href="#account-details" data-toggle="tab" class="nav-link">مشاهده | ویرایش
+                                    اطلاعات</a></li>
+                                <li><a href="#change-password" data-toggle="tab" class="nav-link">تغییر کلمه عبور</a>
+                                </li>
+                                <li><a href="#orders" data-toggle="tab" class="nav-link">سبد خرید</a></li>
+                                <li><a href="#factors" data-toggle="tab" class="nav-link">خریدهای انجام شده</a></li>
+                                <li><a href="{% url 'logout' %}" class="nav-link">خروج</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-9 col-lg-9">
+                        <!-- Tab panes -->
+                        <div class="tab-content dashboard_content">
+                            <div class="tab-pane fade show active" id="dashboard">
+                                <h3>داشبورد </h3>
+                                <p>
+                                    {% if current_user.first_name and current_user.last_name %}
+                                        کاربر: <span class="text-info">{{ current_user }}</span>
+                                        <br>
+                                        پست الکترونیکی: <span class="text-warning">{{ current_user.email }}</span>
+                                    {% else %}
+                                        کاربر: <span class="text-info">{{ current_user.email }}</span>
+                                    {% endif %}
+                                </p>
+                                {% if current_user.address %}
+                                    <p>
+                                        آدرس: <span class="text-info">{{ current_user.address }}</span>
+                                    </p>
+                                {% endif %}
+                                {% if current_user.mobile %}
+                                    <p>
+                                        شماره همراه: <span class="text-info">{{ current_user.mobile }}</span>
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="orders">
+                                <h3>وضعیت سبد خرید من</h3>
+                                {% if user_basket_order %}
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>شناسه سبد خرید</th>
+                                                <th>تاریخ ایجاد</th>
+                                                <th>وضعیت</th>
+                                                <th>جمع کل سبد</th>
+                                                <th>جزییات</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if not user_basket_order.is_paid %}
+                                                <tr>
+                                                <td>{{ user_basket_order.id }}</td>
+                                                <td>{{ user_basket_order.get_jalali_date }}</td>
+                                                {% if user_basket_order.calculate_total_amount > 0 %}
+                                                    <td><span class="text-info">سبد حاوی کالا</span></td>
+                                                {% elif user_basket_order.calculate_total_amount <= 0 %}
+                                                    <td><span class="text-danger">سبد خالی</span></td>
+                                                {% endif %}
+                                                {% if user_basket_order.calculate_total_amount > 0 %}
+                                                    <td>{{ user_basket_order.calculate_total_amount|intcomma:False }}
+                                                        تومن
+                                                    </td>
+                                                {% elif user_basket_order.calculate_total_amount <= 0 %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                {% if user_basket_order.calculate_total_amount > 0 %}
+                                                    <td><a href="{% url 'user_basket_order' %}" class="view">مشاهده سبد
+                                                        خرید</a></td>
+                                                {% elif user_basket_order.calculate_total_amount <= 0 %}
+                                                    <td>سبد خرید شما خالی می باشد</td>
+                                                {% endif %}
+                                            {% else %}
+                                                <td>-</td>
+                                            {% endif %}
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info" role="alert">
+                                        <p>سبد خرید شما بسته است! در صورت ثبت سفارش می توانید به صفحه <a
+                                                href="{% url 'product_list' %}">محصولات</a> مراجعه نمایید.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="factors">
+                                <h3>خریدهای انجام شده</h3>
+                                {% if paid_user_basket_orders %}
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>شناسه سبد خرید</th>
+                                                <th>نام محصول</th>
+                                                <th>قیمت تکی محصول</th>
+                                                <th>تعداد</th>
+                                                <th>کد تخفیف</th>
+                                                <th>قیمت کل</th>
+                                                <th>وضعیت</th>
+                                                <th>تاریخ خرید</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for detail in paid_user_basket_orders %}
+                                                <tr>
+                                                    <td>{{ detail.user_basket_order.id }}</td>
+                                                    <td>{{ detail.product.title }}</td>
+                                                    <td>
+                                                        {% if detail.user_basket_order.coupon %}
+                                                            {{ detail.single_price|intcomma:False }} تومن -
+                                                            {{ detail.user_basket_order.coupon.discount }}%
+                                                            تخفیف
+                                                        {% else %}
+                                                            {{ detail.single_price|intcomma:False }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ detail.product_count }}</td>
+                                                    {% if detail.user_basket_order.coupon %}
+                                                        <td>{{ detail.user_basket_order.coupon.code }}</td>
+                                                    {% else %}
+                                                        <td>-</td>
+                                                    {% endif %}
+                                                    <td>{{ detail.get_coupon_price|intcomma:False }} تومن</td>
+                                                    <td><span class="text-success">پرداخت شده</span></td>
+                                                    <td>{{ detail.user_basket_order.get_jalali_date }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning col-md-6" role="alert">
+                                        <p>خریدی یافت نشد.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane" id="change-password">
+                                <form action="{% url 'dashboard' %}" method="post">
+                                    <div class="col-md-6">
+                                        {% csrf_token %}
+                                        <p class="{% if change_user_password_form.current_password.errors %}text-danger{% endif %}">
+                                            {{ change_user_password_form.current_password.label_tag }}
+                                            {% if change_user_password_form.current_password.errors %}
+                                                {{ change_user_password_form.current_password|add_class:'is-invalid' }}
+                                                {{ change_user_password_form.current_password.errors }}
+                                            {% else %}
+                                                {{ change_user_password_form.current_password }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="{% if change_user_password_form.new_password.errors %}text-danger{% endif %}">
+                                            {{ change_user_password_form.new_password.label_tag }}
+                                            {% if change_user_password_form.new_password.errors %}
+                                                {{ change_user_password_form.new_password|add_class:'is-invalid' }}
+                                                {{ change_user_password_form.new_password.errors }}
+                                            {% else %}
+                                                {{ change_user_password_form.new_password }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="{% if change_user_password_form.confrim_password.errors %}text-danger{% endif %}">
+                                            {{ change_user_password_form.confrim_password.label_tag }}
+                                            {% if change_user_password_form.confrim_password.errors %}
+                                                {{ change_user_password_form.confrim_password|add_class:'is-invalid' }}
+                                                {{ change_user_password_form.confrim_password.errors }}
+                                            {% else %}
+                                                {{ change_user_password_form.confrim_password }}
+                                            {% endif %}
+                                        </p>
+                                        <p>
+                                            <button class="btn btn-success btn-block" type="submit">
+                                                ثبت کلمه عبور جدید
+                                            </button>
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="account-details">
+                                <div class="login">
+                                    <div class="login_form_container">
+                                        <div class="account_login_form">
+                                            <form action="{% url 'dashboard' %}" method="post"
+                                                  enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    <p class="col-md-4">
+                                                        {{ edit_user_form.gender.label_tag }}
+                                                        {{ edit_user_form.gender }}
+                                                    </p>
+                                                    <p>
+                                                        {{ edit_user_form.first_name.label_tag }}
+                                                        {{ edit_user_form.first_name }}
+                                                    </p>
+                                                    <p>
+                                                        {{ edit_user_form.last_name.label_tag }}
+                                                        {{ edit_user_form.last_name }}
+                                                    </p>
+                                                    <p class="{% if edit_user_form.email.errors %}text-danger{% endif %}">
+                                                        {{ edit_user_form.email.label_tag }}
+                                                        {{ edit_user_form.email }}
+                                                        {{ edit_user_form.email.errors }}
+                                                    </p>
+                                                    <p class="{% if edit_user_form.mobile.errors %}text-danger{% endif %}">
+                                                        {{ edit_user_form.mobile.label_tag }}
+                                                        {{ edit_user_form.mobile }}
+                                                        {{ edit_user_form.mobile.errors }}
+                                                    </p>
+                                                    <p>
+                                                        {{ edit_user_form.avatar.label_tag }}
+                                                        {{ edit_user_form.avatar }}
+                                                    </p>
+                                                    <p>
+                                                        {{ edit_user_form.address.label_tag }}
+                                                        {{ edit_user_form.address }}
+                                                    </p>
+                                                    <p class="col-md-4">
+                                                        {{ edit_user_form.birthdate.label_tag }}
+                                                        {{ edit_user_form.birthdate|add_class:'form-control' }}
+                                                    </p>
+                                                </div>
+                                                <br>
+                                                <br>
+                                                <div class="save_button primary_btn default_button">
+                                                    <button type="submit">ثبت ویرایش
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

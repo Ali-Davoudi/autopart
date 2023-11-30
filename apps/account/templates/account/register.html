@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}
+    {% if request.user.is_authenticated %}
+        شما احراز هویت شده اید
+    {% else %}
+        ثبت نام در سایت
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="customer_login mt-32">
+        <div class="container">
+            <div class="row">
+                <!--register area start-->
+                <div class="col-md-6">
+                    {% if request.user.is_authenticated %}
+                        <div class="alert alert-danger" role="alert">
+                            <p>شما در حال حاضر نشست فعالی در سایت دارید. در صورت خروج <a class="text-warning"
+                                                                                         href="{% url 'logout' %}">اینجا</a>
+                                را کلیک کنید.</p>
+                        </div>
+                    {% else %}
+                        <div class="account_form register">
+                            <h2>ثبت نام</h2>
+                            <form action="{% url 'register' %}" method="post">
+                                {% csrf_token %}
+                                <p class="{% if register_form.email.errors %} text-danger {% endif %}">
+                                    {{ register_form.email.label_tag }}
+                                    {{ register_form.email }}
+                                    {{ register_form.email.errors }}
+                                </p>
+                                <p class="{% if register_form.password.errors %} text-danger {% endif %}">
+                                    {{ register_form.password.label_tag }}
+                                    {{ register_form.password }}
+                                    {{ register_form.password.errors }}
+                                </p>
+                                <p class="{% if register_form.confrim_password.errors %} text-danger {% endif %}">
+                                    {{ register_form.confrim_password.label_tag }}
+                                    {{ register_form.confrim_password }}
+                                    {{ register_form.confrim_password.errors }}
+                                </p>
+                                <p class="{% if register_form.captcha.errors %} text-danger {% endif %}">
+                                    {{ register_form.captcha }}
+                                    {{ register_form.captcha.errors }}
+                                </p>
+                                <div class="login_submit">
+                                    <button type="submit">ثبت نام</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+                <!--register area end-->
+            </div>
+        </div>
+    </div>
+{% endblock %}

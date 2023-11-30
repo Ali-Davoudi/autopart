@@ -1,0 +1,12 @@
+<h2>دسته بندی</h2>
+<ul>
+    {% for product_category in product_categories %}
+        <li>
+            <input type="checkbox">
+            <a href="{% url 'product_categories' cat=product_category.url_title %}"> {{ product_category.title }}
+                ({{ product_category.product_count }})</a>
+            <span class="checkmark"></span>
+        </li>
+    {% endfor %}
+
+</ul>

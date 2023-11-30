@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+
+{% block title %}سوالات متداول کاربران{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='سوالات متداول' %}
+    <div class="faq_content_area mt-32">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="faq_content_wrapper">
+                        <h4>
+                            سوالات متداول کاربران همیشگی و عزیز ما در رابطه با ارسال محصولات
+                        </h4>
+                        <p>
+                            هدف ما ارائه خدمات بصورت آنلاین در بهترین کیفیت و مناسب ترین قیمت و پشتیبانی 24 ساعته برای
+                            مردم عزیز ایران است:)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div id="accordion" class="card__accordion">
+                        {% for faq in faqs %}
+                            <div class="card card_dipult">
+                                <div class="card-header card_accor" id="{{ faq.heading }}">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse"
+                                            data-target="#{{ faq.collapse }}"
+                                            aria-expanded="false" aria-controls="{{ faq.collapse }}">
+                                        {{ faq.question }}
+                                        <i class="fa fa-plus"></i>
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+
+                                <div id="{{ faq.collapse }}" class="collapse" aria-labelledby="{{ faq.heading }}"
+                                     data-parent="#accordion"
+                                     style="">
+                                    <div class="card-body">
+                                        <p class="textalign">
+                                            {{ faq.answer }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

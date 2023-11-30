@@ -1,0 +1,19 @@
+{% load thumbnail %}
+
+<h3>مطالب اخیر</h3>
+{% for sorted_blog in sorted_blogs %}
+    <div class="post_wrapper">
+        <div class="post_thumb">
+            <a href="{{ sorted_blog.get_absolute_url }}">
+                {% thumbnail sorted_blog.image '55x55' crop='center' as img %}
+                    <img src="{{ img.url }}" alt="">
+                {% endthumbnail %}
+            </a>
+        </div>
+        <div class="post_info">
+            <h3><a href="{{ sorted_blog.get_absolute_url }}">{{ sorted_blog.title }}</a>
+            </h3>
+            <span>{{ sorted_blog.get_jalali_date }} </span>
+        </div>
+    </div>
+{% endfor %}

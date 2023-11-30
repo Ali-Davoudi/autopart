@@ -1,0 +1,132 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+    سبد خرید
+{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='سبد خرید' %}
+
+    {% if user_basket_order.userbasketorderdetail_set.all %}
+        <div class="shopping_cart_area mt-32">
+            <div class="container">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table_desc">
+                                <div class="cart_page table-responsive" id="user-order-detail-content">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="product_remove">حذف</th>
+                                            <th class="product_thumb">تصویر</th>
+                                            <th class="product_name">محصول</th>
+                                            <th class="product-price">قیمت تکی</th>
+                                            <th class="product_quantity">تعداد</th>
+                                            <th class="product_total">قیمت کل</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for detail in user_basket_order.userbasketorderdetail_set.all %}
+                                            <tr>
+                                                <td class="product_remove">
+                                                    <a onclick="removeAnUserOrder({{ detail.id }})">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </td>
+                                                <td class="product_thumb">
+                                                    <a href="{{ detail.product.get_absolute_url }}">
+                                                        {% thumbnail detail.product.image '90x90' crop='center' as img %}
+                                                            <img src="{{ img.url }}" alt="">
+                                                        {% endthumbnail %}
+                                                    </a>
+                                                </td>
+                                                <td class="product_name"><a
+                                                        href="{{ detail.product.get_absolute_url }}">{{ detail.product.title }}</a>
+                                                </td>
+                                                <td class="product-price">{{ detail.single_price|intcomma:False }}
+                                                    تومن
+                                                </td>
+                                                <td class="product_quantity">
+                                                    {{ detail.product_count }}
+                                                </td>
+                                                <td class="product_total">{{ detail.final_price|intcomma:False }}
+                                                    تومن
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--coupon code area start-->
+                    <div class="coupon_area">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="coupon_code left">
+                                    <h3>کد تخفیف</h3>
+                                    <form method="post" action="{% url 'apply_coupon' %}">
+                                        {% csrf_token %}
+                                        <div class="coupon_inner">
+                                            <p>اگر کد تخفیفی دارید آن را وارد کنید</p>
+                                            <input placeholder="کد تخفیف" id="coupon-code" type="text">
+                                            <button onclick="applyCoupon()" type="button">اعمال کد تخفیف</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="coupon_code right">
+                                    <h3>جمع سبد خرید</h3>
+                                    <div class="coupon_inner">
+                                        <div class="cart_subtotal">
+                                            <p>جمع کل محصولات</p>
+                                            <p class="cart_amount">{{ user_basket_order.calculate_basket_amount|intcomma:False }}
+                                                تومن</p>
+                                        </div>
+                                        {% if user_basket_order.coupon.code %}
+                                            <div class="cart_subtotal ">
+                                                <p>کد تخفیف</p>
+                                                <p class="cart_amount"><span>{{ user_basket_order.coupon.code }}</span>
+                                                </p>
+                                            </div>
+                                            <small>{{ user_basket_order.coupon.discount }}% تخفیف با
+                                                کوپن وارده اعمال شد</small>
+                                            <hr>
+                                            <div class="cart_subtotal">
+                                                <p>جمع کل</p>
+                                                <p class="cart_amount">{{ user_basket_order.calculate_total_amount|intcomma:False }}
+                                                    تومن</p>
+                                            </div>
+                                        {% endif %}
+                                        <div class="checkout_btn">
+                                            <a href="#">پرداخت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--coupon code area end-->
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-warning" role="alert">
+                        <p>سبد خرید شما خالی می باشد.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

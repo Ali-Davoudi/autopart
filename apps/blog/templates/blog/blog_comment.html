@@ -1,0 +1,42 @@
+<div class="comments_box">
+    <h3>{{ comments_count }} نظر</h3>
+    {% for comment in comments %}
+        {% if comment.is_verify %}
+            <div class="comment_list">
+                <div class="comment_thumb">
+                    <img src="/img/blog/comment3.png.jpg" alt="">
+                </div>
+                <div class="comment_content">
+                    <div class="comment_meta">
+                        <h5>{{ comment.user }}</h5>
+                        <span>{{ comment.get_jalali_date }}, در {{ comment.get_jalali_time }}</span>
+                    </div>
+                    <p>
+                        {{ comment.message }}
+                    </p>
+                    <div class="comment_reply">
+                        <a onclick="fillParentId({{ comment.id }})">پاسخ</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% for sub_comment in comment.blogcomment_set.all %}
+            {% if sub_comment.is_verify %}
+                <div class="comment_list list_two">
+                    <div class="comment_thumb">
+                        <img src="/img/blog/comment3.png.jpg" alt="">
+                    </div>
+                    <div class="comment_content">
+                        <div class="comment_meta">
+                            <h5>{{ sub_comment.user }}</h5>
+                            <span>{{ sub_comment.get_jalali_date }}, در {{ sub_comment.get_jalali_time }}</span>
+                        </div>
+                        <p>
+                            {{ sub_comment.message }}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>

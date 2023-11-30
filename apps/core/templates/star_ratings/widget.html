@@ -1,0 +1,41 @@
+{% extends "star_ratings/widget_base.html" %}
+
+{% block rating_detail %}
+    {% if not request.user.is_authenticated %}
+        <p>در صورت درج امتیاز لازم به احراز هویت است.</p>
+    {% endif %}
+    {% block rating_average %}
+        <div class="star-ratings-rating-average">میانگین امتیاز ها: <span
+                class='star-ratings-rating-value'>{% if rating.average > 0 %}
+            {{ rating.average|floatformat:"-2" }}
+            از
+            {{ star_count }}{% else %}امتیازی داده نشده{% endif %}</span></div>
+    {% endblock rating_average %}
+    {% block rating_count %}
+        <div class="star-ratings-rating-count">تعداد امتیاز های داده شده: <span
+                class='star-ratings-rating-value'>{{ rating.count }} نفر</span></div>
+    {% endblock rating_count %}
+    {% block rating_user %}
+        <div class="star-ratings-rating-user">امتیاز شما: <span class='star-ratings-rating-value'
+                                                                data-when-null="امتیازی داده نشده">{% if user_rating %}
+            {{ user_rating.score }} از {{ star_count }}{% elif not request.user.is_authenticated %}
+            <a href="{% url 'login' %}?next={{ request.path }}">ورود به حساب کاربری</a>{% else %}امتیازی
+            داده
+            نشده{% endif %}</span></div>
+    {% endblock rating_user %}
+    <div class="star-ratings-errors">
+    </div>
+    {% block rating_clearable %}
+        {% if clearable %}
+            <div class="star-ratings-clear star-ratings-clear-{{ user_rating|yesno:'visible,hidden' }}">
+                <form action="{% url 'ratings:rate' rating.content_type_id rating.object_id %}"
+                      class="star-ratings-rate-action" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="1" name="clear">
+                    <input type="hidden" value="{{ request.path }}" name="next">
+                    <button type="submit" class="star-ratings-rating-clear">Clear</button>
+                </form>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endblock %}

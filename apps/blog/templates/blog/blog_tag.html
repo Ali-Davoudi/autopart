@@ -1,0 +1,11 @@
+<h3>برچسب محصولات</h3>
+<div class="tag_widget">
+    <ul>
+        {% for blog_tag in blog_tags %}
+            <li>
+                <a href="{% url 'blog_list_by_tag' tag=blog_tag.url_title %}">{{ blog_tag.title }}</a>
+            </li>
+        {% endfor %}
+
+    </ul>
+</div>

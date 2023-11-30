@@ -1,0 +1,76 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+    لیست علاقه مندی ها
+{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/bread_crumbs.html' with title='لیست علاقه مندی ها' %}
+
+    <div class="wishlist_area mt-30">
+        <div class="container">
+            <form action="#">
+                <div class="row">
+                    <div class="col-12">
+                        {% if current_user_wishlist.userwishlistdetail_set.all %}
+                            <div class="table_desc wishlist">
+                                <div class="cart_page table-responsive" id="wishlist-content">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="product_remove">حذف</th>
+                                            <th class="product_thumb">تصویر</th>
+                                            <th class="product_name">محصول</th>
+                                            <th class="product-price">قیمت</th>
+                                            <th class="product_quantity">موجود در</th>
+                                            <th class="product_total">جزییات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for detail in current_user_wishlist.userwishlistdetail_set.all %}
+                                            <tr>
+                                                <td class="product_remove"><a
+                                                        onclick="removeFavProduct({{ detail.id }})">X</a></td>
+                                                <td class="product_thumb">
+                                                    {% thumbnail detail.product.image '90x90' crop='center' as img %}
+                                                        <img src="{{ img.url }}" alt="">
+                                                    {% endthumbnail %}
+                                                </td>
+                                                <td class="product_name">{{ detail.product.title }}</td>
+                                                {% if detail.product.is_active and not detail.product.is_delete and not detail.product.in_stock == 0 %}
+                                                    <td class="product-price">{{ detail.product.sell_price|intcomma:False }}
+                                                        تومن
+                                                    </td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                <td class="product_quantity">فروشگاه سیار</td>
+                                                {% if detail.product.is_active and not detail.product.is_delete and not detail.product.in_stock == 0 %}
+                                                    <td class="product_total"><a
+                                                            href="{{ detail.product.get_absolute_url }}">مشاهده کالا</a>
+                                                    </td>
+                                                {% else %}
+                                                    <td>این محصول فعلا موجود نمی باشد</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning col-md-6" role="alert">
+                                <p>لیست علاقه مندی های شما خالی می باشد.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

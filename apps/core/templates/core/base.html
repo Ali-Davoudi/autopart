@@ -1,0 +1,32 @@
+{% load static %}
+{% load render_partial %}
+{% load pwa %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% render_partial 'apps.site.views.favicon_partial' %}
+    {% include 'core/partials/header_refs.html' %}
+    {% progressive_web_app_meta %}
+</head>
+<body>
+<header class="header_area">
+    <!--header-->
+    {% render_partial 'apps.site.views.header_site_component' %}
+    <!--header-->
+</header>
+<!--Offcanvas menu area start-->
+{% render_partial 'apps.site.views.menu_component' %}
+<!--Offcanvas menu area end-->
+{% block content %}{% endblock %}
+<!--footer area start-->
+{% render_partial 'apps.site.views.footer_site_component' %}
+<!--footer area end-->
+{% include 'core/partials/footer_refs.html' %}
+</body>
+</html>

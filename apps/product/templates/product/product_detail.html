@@ -1,0 +1,353 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+{% load thumbnail %}
+{% load social_share %}
+
+{% block title %}جزییات | {{ product.title }}{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/product_detail_bread_crumbs.html' with products='لیست محصولات' brand_url=product.brand.url_title brand_title=product.brand.title title=product.title %}
+    <div class="product_details mt-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product-details-tab">
+                        <div id="img-1" class="zoomWrapper single-zoom">
+                            <a href="#">
+                                {% thumbnail product.image '600x600' crop='center' as img %}
+                                    <img id="zoom1" src="{{ img.url }}"
+                                         data-zoom-image="{{ img.url }}" alt="big-1">
+                                {% endthumbnail %}
+                            </a>
+                        </div>
+
+                        <div class="single-zoom-thumb">
+                            <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+                                {% for group in product_galleries %}
+                                    {% for gallery in group %}
+                                        <li>
+                                            <a href="#gallery" class="elevatezoom-gallery active" data-update=""
+                                               data-image="{% thumbnail gallery.image '600x600' crop='center' as img %}
+                                                {{ img.url }}
+                                               {% endthumbnail %}"
+                                               data-zoom-image="{{ gallery.image.url }}">
+                                                <img src="{% thumbnail gallery.image '600x600' crop='center' as img %}
+                                                {{ img.url }}
+                                               {% endthumbnail %}" alt="zo-th-1"/>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product_d_right">
+                        <form action="#">
+
+                            <h1>{{ product.title }}</h1>
+                            <div class="product_nav">
+                                <ul>
+
+                                    <li class="next"><a {% if not next_product %}class="unclickable"{% endif %}
+                                                        href="{{ next_product.get_absolute_url }}"><i
+                                            class="fa fa-angle-left"></i></a></li>
+                                    <li class="prev"><a {% if not previous_product %}class="unclickable"{% endif %}
+                                                        href="{{ previous_product.get_absolute_url }}"><i
+                                            class="fa fa-angle-right"></i></a></li>
+                                </ul>
+                            </div>
+                            {% include 'product/star_rating.html' with object=product %}
+                            {% if product.in_stock != 0 %}
+                                <div class="price_box">
+                                    {% if product.discount %}
+                                        <span class="current_price">{{ product.sell_price|intcomma:False }} تومن</span>
+                                        <span class="old_price">{{ product.price|intcomma:False }} تومن</span>
+                                    {% else %}
+                                        <span class="current_price">{{ product.price|intcomma:False }} تومن</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            <div class="product_desc">
+                                <p>{{ product.short_description }}</p>
+                            </div>
+                            <div class="product_variant color">
+                                {% if product.in_stock == 3 %}
+                                    <h3 class="text-primary">تنها 3 عدد در انبار باقیست</h3>
+                                {% elif product.in_stock == 2 %}
+                                    <h3 class="text-primary">تنها 2 عدد در انبار باقیست</h3>
+                                {% elif product.in_stock == 1 %}
+                                    <h3 class="text-primary">تنها 1 عدد در انبار باقیست</h3>
+                                {% elif product.in_stock == 0 %}
+                                    <h3 class="text-danger">فعلا موجود نمی باشد</h3>
+                                {% elif product.in_stock > 3 %}
+                                    <h3 class="text-success"> موجود در انبار</h3>
+                                {% endif %}
+                            </div>
+                            {% if product.in_stock != 0 %}
+                                <div class="product_variant quantity">
+                                    <label>تعداد</label>
+                                    <input min="1" max="{{ product.in_stock }}" value="1" type="number"
+                                           id="product-count">
+
+                                    <button class="button" type="button" onclick="addProductToOrder({{ product.id }})">
+                                        افزودن به سبد
+                                        خرید
+                                    </button>
+                                </div>
+                            {% endif %}
+                            <div class=" product_d_action">
+                                <ul>
+                                    {% if request.user.is_authenticated and current_user_basket_order_detail.product_count %}
+                                        <li>
+                                            <div class="alert alert-success col-md-8" role="alert">
+                                                <p>از این محصول به تعداد
+                                                    ( {{ current_user_basket_order_detail.product_count }} ) در سبد
+                                                    خرید
+                                                    شما وجود دارد.</p>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                    {% if current_user_wishlist_detail.product %}
+                                        <li>
+                                            <div class="alert alert-primary col-md-8" role="alert">
+                                                <p>این محصول در لیست علاقه مندی های شما وجود دارد.</p>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a onclick="addProductToWishlist({{ product.id }})">
+                                                افزودن به لیست علاقه مندی ها
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="product_meta">
+                                <span>دسته بندی :
+                                    {% for category in product.category.all %}
+                                        <a href="{% url 'product_categories' cat=category.url_title %}"> {{ category.title }} </a>
+                                    {% endfor %}
+                                </span>
+                            </div>
+                            <div class="product_meta">
+                                <span>برند :<a
+                                        href="{% url 'product_brands' brand=product.brand.url_title %}"> {{ product.brand.title }} </a></span>
+                            </div>
+                        </form>
+                        <div class="priduct_social">
+                            <ul>
+                                <li>
+                                    {% post_to_facebook object_or_url '<i class="fa fa-facebook"></i> اشتراک در فیسبوک' 'facebook' %}
+                                </li>
+                                <li>
+                                    {% post_to_twitter 'نام محصول: {{ product.title }}' object_or_url '<i class="fa fa-twitter"></i> اشتراک در توئیتر' 'twitter' %}
+                                </li>
+                                <li>
+                                    {% post_to_gplus object_or_url '<i class="fa fa-google-plus"></i> اشتراک در گوگل پلاس' 'google-plus' %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--product details end-->
+
+    <!--product info start-->
+    <div class="product_d_info">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="product_d_inner">
+                        <div class="product_info_button">
+                            <ul class="nav" role="tablist">
+                                <li>
+                                    <a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info"
+                                       aria-selected="false">توضیحات</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet"
+                                       aria-selected="false">مشخصات</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews"
+                                       aria-selected="false">نظرات ({{ comments_count }})</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <div class="product_info_content">
+                                    <p class="textalign">{{ product.description }}</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="sheet" role="tabpanel">
+                                <div class="product_d_table">
+                                    <form action="#">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="first_child"> سال ساخت</td>
+                                                <td> {{ product.production_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="first_child">کشور سازنده</td>
+                                                <td>{{ product.production_country }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="first_child">موجود در</td>
+                                                <td>فروشگاه متین</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                                <div class="reviews_wrapper">
+                                    {% for comment in comments %}
+                                        {% if comment.user.is_superuser %}
+                                            <h2>{{ comment.user }} </h2>
+                                        {% endif %}
+                                        <div class="reviews_comment_box">
+                                            <div class="comment_thmb">
+                                                <img src="/static/img/blog/comment2.jpg" alt="">
+                                            </div>
+                                            <div class="comment_text">
+                                                <div class="reviews_meta">
+                                                    <p>
+                                                        {% if comment.user.is_superuser %}
+                                                            <strong class="text-info">مدیریت اوتوپارت</strong>
+                                                        {% else %}
+                                                            <strong class="text-success">کاربر اوتوپارت</strong>
+                                                        {% endif %}در
+                                                        {{ comment.get_jalali_date }}
+                                                    </p>
+                                                    <span> {{ comment.message }} </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="comment_title">
+                                        <h2>افزودن نظر</h2>
+                                        <div class="alert alert-info col-md-6" role="alert">
+                                            <p>در صورت درج دیدگاه؛ نظر شما به صورت ناشناس در مورد این محصول نمایش
+                                                داده خواهد شد.</p>
+                                        </div>
+                                        {% if comments_count == 0 %}
+                                            <div class="alert alert-success col-md-6" role="alert">
+                                                <p>هنوز نظری ثبت نشده. اولین نفری باشید که دیدگاهی راجب این محصول
+                                                    ذکر کرده است!</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                        <div class="product_review_form">
+                                        <form action="{% url 'add_product_comment' %}" method="post">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label for="review_comment">نظر شما </label>
+                                                    {% csrf_token %}
+                                                    <textarea name="comment_text" id="comment_text"></textarea>
+                                                </div>
+                                            </div>
+                                            <a class="btn btn-warning"
+                                               onclick="sendProductComment({{ product.id }})">ارسال</a>
+                                        </form>
+                                    {% else %}
+                                        <div class="alert alert-warning col-md-6" role="alert">
+                                            <strong>در صورت ثبت نظر لطفا ابتدا از این <a
+                                                    href="{% url 'login' %}?next={{ request.path }}"
+                                                    class="text-danger">لینک</a>
+                                                وارد حساب کاربری خود شوید.</strong>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--product info end-->
+
+    <!--product area start-->
+    <section class="product_area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_title">
+                        <h2><span>محصولات  <strong>مرتبط</strong></span></h2>
+                    </div>
+                    <div class="product_carousel product_column{{ related_products|slice:':5'|length }} owl-carousel">
+                        {% for related_product in related_products %}
+                            <div class="single_product">
+                                <div class="product_name">
+                                    <h3><a href="{{ related_product.get_absolute_url }}">{{ related_product.title }}</a>
+                                    </h3>
+                                    <p class="manufacture_product"><a
+                                            href="{% url 'product_brands' brand=related_product.brand.url_title %}"> {{ related_product.brand.title }} </a>
+                                    </p>
+                                </div>
+                                <div class="product_thumb">
+                                    <a class="primary_img" href="{{ related_product.get_absolute_url }}">
+                                        {% thumbnail related_product.image '600x600' crop='center' as img %}
+                                            <img src="{{ img.url }}" alt="">
+                                        {% endthumbnail %}
+                                    </a>
+                                    {% if related_product.discount %}
+                                        <div class="label_product">
+                                            <span class="label_sale">{{ related_product.discount }}%-</span>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="action_links">
+                                        <ul>
+                                            <li class="quick_button"><a href="{{ related_product.get_absolute_url }}"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal_box"
+                                                                        title="نمایش جزئیات"> <span
+                                                    class="lnr lnr-magnifier"></span></a></li>
+                                            <li class="wishlist"><a href="wishlist.html"
+                                                                    title="افزودن به سبد خرید"><span
+                                                    class="lnr lnr-heart"></span></a></li>
+                                            <li class="مقایسه کنید"><a href="compare.html" title="مقایسه کنید"><span
+                                                    class="lnr lnr-sync"></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product_content">
+                                    <div class="product_ratings">
+                                        <ul>
+                                            <li><a href="#"><i class="ion-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-star"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product_footer d-flex align-items-center">
+                                        <div class="price_box">
+                                            <span class="regular_price">{{ related_product.sell_price|intcomma:False }}  تومن </span>
+                                        </div>
+                                        <div class="add_to_cart">
+                                            <a href="cart.html" title="افزودن به سبد خرید"><span
+                                                    class="lnr lnr-cart"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

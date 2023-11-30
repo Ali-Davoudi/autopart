@@ -1,0 +1,7 @@
+<div dir="rtl">
+    <h3>فعال سازی حساب کاربری</h3>
+    <hr>
+    <p>کاربر عزیز؛ با پست الکترونیکی : {{ user.email }}</p>
+    <p>لطفا جهت فعال سازی حساب کاربری خود بر روی لینک <a
+            href="http://127.0.0.1:8000{% url 'account_activation' active_code=user.email_active_code %}">فعال سازی</a> کلیک کنید.</p>
+</div>

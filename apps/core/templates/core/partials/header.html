@@ -1,0 +1,139 @@
+{% load thumbnail %}
+{% load humanize %}
+{% load render_partial %}
+
+<div class="header_top">
+    <div class="container">
+        <div class="top_inner">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6">
+                    {% if setting.instagram or setting.twitter %}
+                        <div class="follow_us">
+                            <label>دنبال کردن:</label>
+                            <ul class="follow_link">
+                                {% if setting.instagram %}
+                                    <li><a href="https://www.instagram.com/{{ setting.instagram }}"><i
+                                            class="ion-social-instagram"></i></a></li>
+                                {% endif %}
+                                {% if setting.twitter %}
+                                    <li><a href="https://www.twitter.com/{{ setting.twitter }}"><i
+                                            class="ion-social-twitter"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="top_right text-right">
+                        <ul>
+                            {% if request.user.is_superuser %}
+                                <li class="top_links"><a href="/admin" target="_blank"><i
+                                        class="ion-android-person"></i> پنل ادمین کل<i></i></a>
+                                </li>
+                            {% endif %}
+                            {% if request.user.is_authenticated %}
+                                <li class="top_links"><a href="#"><i class="ion-android-person"></i> حساب کاربری من<i
+                                        class="ion-ios-arrow-down"></i></a>
+                                    <ul class="dropdown_links">
+                                        <li><a href="{% url 'dashboard' %}">پنل کاربری من </a></li>
+                                        <li><a href="{% url 'user_basket_order' %}">سبد خرید من</a></li>
+                                        <li><a href="{% url 'user_wishlist' %}">لیست علاقه مندی ها</a></li>
+                                        <li><a href="{% url 'logout' %}">خروج از حساب کاربری</a></li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="top_links"><a href="#"><i class="ion-android-person"></i> حساب کاربری من<i
+                                        class="ion-ios-arrow-down"></i></a>
+                                    <ul class="dropdown_links">
+                                        <li><a href="{% url 'login' %}">ورود</a></li>
+                                        <li><a href="{% url 'register' %}">ثبت نام </a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header_middle">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-6">
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        {% thumbnail setting.logo '170x31' crop='center' format='PNG' as img %}
+                            <img src="{{ img.url }}" alt="">
+                        {% endthumbnail %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-6">
+                <div class="middel_right">
+                    <div class="search-container">
+                        <form action="{% url 'search_products' %}" method="get">
+                            <div class="search_box">
+                                <input placeholder="جستجو محصول..." type="text" name="search">
+                                <button type="submit"><i class="ion-ios-search-strong"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="middel_right_info">
+                        {% if not request.user.is_authenticated %}
+                            <div class="header_wishlist">
+                                <a href="{% url 'login' %}?next={% url 'user_wishlist' %}">
+                                    <span class="lnr lnr-heart"></span>علاقه مندی
+                                </a>
+                                <span class="wishlist_quantity">0</span>
+                            </div>
+                        {% endif %}
+
+                        {% render_partial 'apps.wishlist.views.site_header_wishlist_count' %}
+
+                        {% if not request.user.is_authenticated %}
+                            <div class="mini_cart_wrapper">
+                                <a href="{% url 'login' %}?next={% url 'user_basket_order' %}">
+                                    <span class="lnr lnr-cart"></span>سبد خرید
+                                </a>
+                                <span class="cart_quantity">0</span>
+                            </div>
+                        {% endif %}
+
+                        {% render_partial 'apps.basket_order.views.site_header_order_count' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--mini cart-->
+{% render_partial 'apps.basket_order.views.site_header_mini_cart' %}
+<!--mini cart end-->
+
+<!--header bottom satrt-->
+<div class="header_bottom sticky-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="main_menu header_position">
+                    <nav>
+                        <ul>
+                            <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                            <li><a href="{% url 'product_list' %}">محصولات</a></li>
+                            <li><a href="{% url 'blog_list' %}">وبلاگ</a></li>
+                            <li><a href="{% url 'service' %}">خدمات</a></li>
+                            <li><a href="{% url 'about' %}">درباره ما</a></li>
+                            <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                            <li><a href="{% url 'contact' %}">ارتباط با ما</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--header bottom end-->

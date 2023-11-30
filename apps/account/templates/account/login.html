@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}
+    {% if request.user.is_authenticated %}
+        شما احراز هویت شده اید
+    {% else %}
+        ورود به حساب کاربری
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include 'core/partials/message.html' %}
+    <div class="customer_login mt-32">
+        <div class="container">
+            <div class="row">
+                <!--login area start-->
+                <div class="col-md-6">
+                    {% if request.user.is_authenticated %}
+                        <div class="alert alert-danger" role="alert">
+                            <p>شما در حال حاضر نشست فعالی در سایت دارید. در صورت خروج <a class="text-warning"
+                                                                                         href="{% url 'logout' %}">اینجا</a>
+                                را کلیک کنید.</p>
+                        </div>
+                    {% else %}
+                        <div class="account_form">
+                            <h2>ورود</h2>
+                            <form action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                                {% if request.GET.next %}
+                                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                                {% endif %}
+                                <p class="{% if login_form.email.errors %} text-danger {% endif %}">
+                                    {{ login_form.email.label_tag }}
+                                    {{ login_form.email }}
+                                    {{ login_form.email.errors }}
+                                </p>
+                                <p class="{% if login_form.password.errors %} text-danger {% endif %}">
+                                    {{ login_form.password.label_tag }}
+                                    {{ login_form.password }}
+                                    {{ login_form.password.errors }}
+                                </p>
+                                <p class="{% if login_form.captcha.errors %} text-danger {% endif %}">
+                                    {{ login_form.captcha }}
+                                    {{ login_form.captcha.errors }}
+                                </p>
+                                <p><a href="{% url 'register' %}">ایجاد حساب کاربری در اوتوپارت</a></p>
+                                <p>
+                                    <a href="{% url 'social:begin' 'google-oauth2' %}">احراز هویت در اوتوپارت به وسیله
+                                        گوگل</a>
+                                </p>
+
+                                <div class="login_submit">
+                                    <a href="{% url 'forget_password' %}">رمز عبور را فراموش کرده اید؟</a>
+                                    <label for="remember">
+                                        {{ login_form.remember_me }}
+                                        {{ login_form.remember_me.label }}
+                                    </label>
+                                    <button type="submit">ورود</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+                <!--login area start-->
+            </div>
+        </div>
+    </div>
+{% endblock %}
