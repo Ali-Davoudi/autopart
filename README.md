@@ -1,6 +1,6 @@
 # Autopart. This is a project that I develop in my spare time and I usually to implement the cool things I experience in it.
 
-> [!TIP]
+> [!NOTE]
 > This project deployed on [PythonAnywhere](https://www.pythonanywhere.com/):
 > - https://alidavoudi.pythonanywhere.com/
 
