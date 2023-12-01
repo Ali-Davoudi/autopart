@@ -69,7 +69,7 @@ python manage.py createsuperuser
 ### Some features [en]
 * Authentication system through the website itself and Google account
 * Auth: Login, Logout, Register, Remember me checkbox, Sending Email active code to user for complete registration, Token Authentication, Forgot password, Reset password
-* Google reCaptcha
+* Google reCAPTCHA
 * The automatic loss of the user's shopping cart information if it is open and does not pay within a certain period of time (I used 30 seconds for tesing purpose. If you want changing the value. Go to ~\autopart\apps\basket_order\signals.py)
 * Star ratings for each product
 * Apply coupon code
