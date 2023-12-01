@@ -15,7 +15,7 @@ sudo apt install python3-virtualenv
 python3 -m virtualenv venv
 ```
 ```
-source venv\bin\activate
+source venv/bin/activate
 ```
 - Install requirements
 ```
