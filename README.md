@@ -1,4 +1,9 @@
 # Autopart. This is a project that I develop in my spare time and I usually to implement the cool things I experience in it.
+
+> [!TIP]
+> This project deployed on [PythonAnywhere](https://www.pythonanywhere.com/):
+> - https://alidavoudi.pythonanywhere.com/
+
 ### Usage
 - Geting the project source
 ```
@@ -32,7 +37,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 > [!TIP]
->If you want be a superuser, going to admin, working directley with features and etc. Run the following command:
+> If you want be a superuser, going to admin, working directley with features and etc. Run the following command:
 ```
 python manage.py createsuperuser
 ```
