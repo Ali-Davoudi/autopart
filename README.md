@@ -4,13 +4,13 @@
 ```
 git clone https://github.com/ali-davoudi/autopart
 ```
-- At the main project directory(~\autopart), create ``` .env ``` file and based on ``` .env-example ``` fill the informations.
+- At the main project directory(~\autopart), create `.env ` file and based on ` .env-example ` fill the informations.
 
-- Install virtualenv globally on your  ```Ubuntu-Debian``` distribution or anything else(It requires its own installation principles)
+- Install `virtualenv` globally on your  `Ubuntu/Debian` distribution or anything else(It requires its own installation principles)
 ```
 sudo apt install python3-virtualenv
 ```
-- Then you need to create a ```venv``` for your project. at ~\autopart open the terminal and follow these commands:
+- Then you need to create a `venv` for your project. at ~\autopart open the terminal and follow these commands:
 ```
 python3 -m virtualenv venv
 ```
@@ -31,11 +31,12 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
-
-- If you want be a superuser, going to admin, directley working with features and etc
+> [!TIP]
+>If you want be a superuser, going to admin, working directley with features and etc. Run the following command:
 ```
 python manage.py createsuperuser
 ```
+
 
 ### Some features [fa]
 - سیستم احراز هویت از طریق خود وب سایت و اکانت گوگل
