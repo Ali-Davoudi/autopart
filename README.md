@@ -46,7 +46,6 @@ python manage.py createsuperuser
 - Password validation with regular expression
 - Using BeautifulSoup4 for CKEditor validation
 
-
 ### Some features [fa]
 - سیستم احراز هویت از طریق خود وب سایت و اکانت گوگل
 - احراز هویت: ورود، خروج، ثبت نام، مرا به خاطر بسپار، ارسال کد فعال سازی ایمیل به کاربر برای ثبت نام، Token Authentication، فراموشی رمز عبور، بازیابی رمز عبور
