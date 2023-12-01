@@ -42,9 +42,10 @@ python manage.py runserver
 python manage.py createsuperuser
 ```
 
-### Some hints about custom validators
-- Password validation with regular expression
-- Using BeautifulSoup4 for CKEditor validation
+> [!NOTE]
+> Some hints about custom validators:
+> - Password validation with regular expression.
+> - Using BeautifulSoup4 for getting the plain text from CKEditor and validate it.
 
 ### Some features [fa]
 - سیستم احراز هویت از طریق خود وب سایت و اکانت گوگل
