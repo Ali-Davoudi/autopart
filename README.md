@@ -1,4 +1,4 @@
-# Autopart. This is a project that I develop in my spare time and I usually implement everything I experience in this project.
+# Autopart. This is a project that I develop in my spare time and I usually to implement the cool things I experience in it.
 ### Usage
 - Geting the project source
 ```
