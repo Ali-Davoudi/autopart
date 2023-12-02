@@ -58,13 +58,13 @@ class UserBasketOrder(models.Model):
 
         return total_amount
 
-    def get_jalali_date(self, date_type='created_at'):
-        if date_type == 'created_at':
-            date_to_convert = self.created_at
-        elif date_type == 'payment_date':
-            date_to_convert = self.payment_date
-        else:
-            raise ValueError("Invalid date_type. Use 'created_at' or 'payment_date'.")
+    def get_jalali_date(self):
+        jalali_date = datetime2jalali(self.payment_date)
+        month_names = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن',
+                       'اسفند']
+        month_index = jalali_date.month - 1
+        month_name = month_names[month_index]
+        return jalali_date.strftime('%d %s %Y') % month_name
 
         jalali_date = datetime2jalali(date_to_convert)
         month_names = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن',
