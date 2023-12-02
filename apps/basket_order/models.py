@@ -26,7 +26,7 @@ class UserBasketOrder(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.PROTECT, verbose_name='کاربر')
     is_paid = models.BooleanField(verbose_name='پرداخت شده / پرداخت نشده')
     created_at = models.DateTimeField(default=timezone.now, verbose_name='تاریخ و زمان ایجاد')
-    payment_date = models.DateTimeField(auto_now_add=True, null=True, blank=True, verbose_name='تاریخ و زمان پرداخت')
+    payment_date = models.DateTimeField(null=True, blank=True, verbose_name='تاریخ و زمان پرداخت')
     coupon = models.ForeignKey(to=Coupon, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='کوپن')
 
     class Meta:
@@ -58,8 +58,15 @@ class UserBasketOrder(models.Model):
 
         return total_amount
 
-    def get_jalali_date(self):
-        jalali_date = datetime2jalali(self.payment_date)
+    def get_jalali_date(self, date_type='created_at'):
+        if date_type == 'created_at':
+            date_to_convert = self.created_at
+        elif date_type == 'payment_date':
+            date_to_convert = self.payment_date
+        else:
+            raise ValueError("Invalid date_type. Use 'created_at' or 'payment_date'.")
+
+        jalali_date = datetime2jalali(date_to_convert)
         month_names = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن',
                        'اسفند']
         month_index = jalali_date.month - 1
