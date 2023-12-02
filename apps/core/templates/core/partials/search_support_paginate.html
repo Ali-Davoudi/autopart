@@ -6,19 +6,29 @@
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                 </a>
             {% else %}
-                <a href="?page={{ page_obj.previous_page_number }}">
+                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                 </a>
             {% endif %}
         </li>
     {% endif %}
 
-    {% if page_obj.number|add:'-4' > 1 %}
+    {% if page_obj.number > 3 %}
         <li>
             {% if request.GET.search %}
-                <a href="?search={{ request.GET.search }}&page={{ page_obj.number|add:'-5' }}">{{ paginator.ELLIPSIS }}</a>
+                <a href="?search={{ request.GET.search }}&page=1">1</a>
             {% else %}
-                <a href="?page={{ page_obj.number|add:'-5' }}">{{ paginator.ELLIPSIS }}</a>
+                <a href="{{ request.path }}?page=1">1</a>
+            {% endif %}
+        </li>
+    {% endif %}
+
+        {% if page_obj.number > 4 %}
+        <li>
+            {% if request.GET.search %}
+                <span>...</span>
+            {% else %}
+                <span>...</span>
             {% endif %}
         </li>
     {% endif %}
@@ -27,33 +37,38 @@
         {% if page_obj.number == page_number %}
             <li class="current">
                 {% if request.GET.search %}
-                    <a href="?search={{ request.GET.search }}&page={{ page_number }}">{{ page_number }}</a>
+                    <span>{{ page_number }}</span>
                 {% else %}
-                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                    <span>{{ page_number }}</span>
                 {% endif %}
             </li>
-        {% elif page_number > page_obj.number|add:'-5' and page_number < page_obj.number|add:'5' %}
+        {% elif page_number > page_obj.number|add:'-3' and page_number < page_obj.number|add:'3' %}
             <li>
                 {% if request.GET.search %}
                     <a href="?search={{ request.GET.search }}&page={{ page_number }}">{{ page_number }}</a>
                 {% else %}
-                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                    <a href="{{ request.path }}?page={{ page_number }}">{{ page_number }}</a>
                 {% endif %}
             </li>
         {% endif %}
     {% endfor %}
 
-    {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
-        <li>
-            {% if request.GET.search %}
-                <a href="?search={{ request.GET.search }}&page={{ page_obj.number|add:'-5' }}">{{ paginator.ELLIPSIS }}</a>
-            {% else %}
-                <a href="?page={{ page_obj.number|add:'-5' }}">{{ paginator.ELLIPSIS }}</a>
-            {% endif %}
-        </li>
-    {% endif %}
-
     {% if page_obj.has_next %}
+        {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+        <li>
+            <span>....</span>
+        </li>
+
+        <li>
+            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+            <li>
+                <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            </li>
+        {% endif %}
+
         <li>
             {% if request.GET.search %}
                 <a href="?search={{ request.GET.search }}&page={{ page_obj.next_page_number }}">
@@ -64,6 +79,6 @@
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </a>
             {% endif %}
-        </li>
+            </li>
     {% endif %}
 </ul>
