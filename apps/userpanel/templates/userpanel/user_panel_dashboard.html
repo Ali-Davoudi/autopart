@@ -74,7 +74,7 @@
                                             <thead>
                                             <tr>
                                                 <th>شناسه سبد خرید</th>
-                                                <th>تاریخ ایجاد</th>
+                                                <th>زمان و تاریخ ایجاد</th>
                                                 <th>وضعیت</th>
                                                 <th>جمع کل سبد</th>
                                                 <th>جزییات</th>
@@ -84,7 +84,7 @@
                                             {% if not user_basket_order.is_paid %}
                                                 <tr>
                                                 <td>{{ user_basket_order.id }}</td>
-                                                <td>{{ user_basket_order.get_jalali_date }}</td>
+                                                <td>{{ user_basket_order.created_at|to_jalali }}</td>
                                                 {% if user_basket_order.calculate_total_amount > 0 %}
                                                     <td><span class="text-info">سبد حاوی کالا</span></td>
                                                 {% elif user_basket_order.calculate_total_amount <= 0 %}
