@@ -66,13 +66,6 @@ class UserBasketOrder(models.Model):
         month_name = month_names[month_index]
         return jalali_date.strftime('%d %s %Y') % month_name
 
-        jalali_date = datetime2jalali(date_to_convert)
-        month_names = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن',
-                       'اسفند']
-        month_index = jalali_date.month - 1
-        month_name = month_names[month_index]
-        return jalali_date.strftime('%d %s %Y') % month_name
-
 
 class UserBasketOrderDetail(models.Model):
     user_basket_order = models.ForeignKey(to=UserBasketOrder, on_delete=models.PROTECT, verbose_name='سبد خرید کاربر')
