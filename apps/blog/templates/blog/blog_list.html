@@ -49,7 +49,7 @@
                                     </span>
                                     </div>
                                     <div class="blog_desc">
-                                        <p>{{ blog.short_description|safe }}</p>
+                                        <p>{{ blog.short_description|truncatechars_html:100|safe }}</p>
                                     </div>
                                     <div class="readmore_button">
                                         <a href="{{ blog.get_absolute_url }}">ادامه مطلب</a>
