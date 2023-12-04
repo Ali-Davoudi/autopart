@@ -60,7 +60,7 @@ class AddToWishListView(View):
                 'show_bool_cancel_button': 'true',
                 'confrim_button_color': '#3085d6',
                 'cancel_button_color': '#d33',
-                'confrim_button_text': """<a href='/login'>ورود به حساب کاربری</a>""",
+                'confrim_button_text': """<a href='/auth/login'>ورود به حساب کاربری</a>""",
                 'cancel_button_text': 'بازگشت'
             })
 
