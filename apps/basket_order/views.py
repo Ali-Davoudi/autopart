@@ -84,7 +84,7 @@ class AddProductToOrder(View):
                 'title': 'احراز هویت!',
                 'text': 'برای افزودن محصول به سبد خرید، لازم است ابتدا وارد حساب کاربری خود شوید.',
                 'icon': 'info',
-                'confrim_button_text': """<a href="/login">ورود به حساب کاربری</a>""",
+                'confrim_button_text': """<a href="/auth/login">ورود به حساب کاربری</a>""",
                 'confrim_button_color': '#3085d6',
                 'show_bool_cancel_button': 'true',
                 'cancel_button_text': 'بازگشت'
