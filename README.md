@@ -58,7 +58,7 @@ python manage.py createsuperuser
 - انبارداری و پویایی آن در صورت اضافه شدن، حذف از سبد خرید و همچنین نهایی شدن خرید
 - بخش تخفیفات ویژه در صفحه اصلی، درصورتی که درصد تخفیف محصولات بالای 5 درصد باشند
 - استفاده از CKEditor به عنوان ویرایشگر برای بخش های وبلاگ و تماس
-- ادمین می تواند مستقیماً به کاربری که از صفحه تماس، پیام ارسال کرده است؛ پاسخ اش را از پنل مدیریت در غالب ایمیل به کاربر ارسال کند
+- ما می‌توانیم مستقیماً از پنل مدیریت به کاربری که از طریق صفحه <**ارتباط با ما**> برای ما پیام ارسال کرده است، در صورت تمایل، پاسخش را ایمیل کنیم
 - مدیریت نظرات کاربران در مورد هر محصول و مقاله و امکان تایید نمایش آن در صفحه توسط ادمین
 - مدیریت سبد خرید توسط کاربر جاری
 - امکان اشتراک گذاری محصولات و مقالات بر اساس اشتراک اجتماعی (شبکه های اجتماعی)
@@ -79,14 +79,14 @@ python manage.py createsuperuser
 * Authentication system through the website itself and Google account
 * Auth: Login, Logout, Register, Remember me checkbox, Sending Email active code to user for complete registration, Token Authentication, Forgot password, Reset password
 * Google reCAPTCHA
-* The automatic loss of the user's shopping cart information if it is open and does not pay within a certain period of time (I used 30 seconds for tesing purpose. If you want changing the value. Go to ~\autopart\apps\basket_order\signals.py)
+* The automatic loss of the user's shopping cart information if it is open and does not pay within a certain period of time (If you want changing the value. Go to ~\autopart\apps\basket_order\signals.py)
 * Star ratings for each product
-* Apply coupon code
+* The possibility of applying a discount coupon by the user (if the coupon is valid)
 * The possibility of applying a discount percentage to each product by admin
 * In Stock and its dynamicity in case of addition, removing from the cart and also finalizing the purchase
-* Special discounts
+* Special discounts section on the main page, if the discount percentage of the products is above 5%
 * Using CKEditor as an editor for blog and contact sections
-* We can reply directly to the user who sent us a message through the contact page from the admin panel
+* We can email a reply directly from the admin panel to a user who has sent us a message through the contact page, if desired
 * Managing user comments on each product and article and possibility for confirming its display on the page by admin
 * Management of the shopping cart by related user
 * Ability to share products and articles by social share (Social Media)
