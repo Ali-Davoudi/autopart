@@ -73,7 +73,8 @@ python manage.py createsuperuser
 - اسلایدر
 - بنرهای تبلیغاتی
 - قابلیت PWA
-- استفاده از SweetAlert در ساختارهای Ajax.
+- استفاده از SweetAlert در ساختارهای Ajax
+- و ...
 
 ### Some features [en]
 * Authentication system through the website itself and Google account
