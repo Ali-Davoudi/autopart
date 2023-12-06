@@ -5,7 +5,7 @@
 > - https://alidavoudi.pythonanywhere.com/
 
 ### Usage
-- Geting the project source
+- Get the project source
 ```
 git clone https://github.com/ali-davoudi/autopart
 ```
