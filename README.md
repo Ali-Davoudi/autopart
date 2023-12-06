@@ -93,7 +93,6 @@ python manage.py createsuperuser
 * Ability to share products and articles by social share (Social Media)
 * User panel: Possibility to edit personal information, change password, view shopping cart status, purchase invoice, etc
 * PWA feature
-* The dynamic nature of the website information
 * Search functionality for products and articles
 * Advertising banners
 * Dynamic slider
