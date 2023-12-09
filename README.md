@@ -44,7 +44,7 @@ python manage.py createsuperuser
 
 > [!NOTE]
 > Some hints about custom validators:
-> - Password validation with regular expression.
+> - Password strength validation with regular expression.
 > - Using BeautifulSoup4 for getting the plain text from CKEditor and validate it.
 
 ### Some features [fa]
